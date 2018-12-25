@@ -1,0 +1,19 @@
+{% extends "common/layout_user.html" %}
+{% block content %}
+    <div class="row">
+        <div class="panel panel-default gray-bg text-center" style="min-height: 600px;line-height: 600px;">
+            <div class="panel-body gray-bg" style="font-size: 18px;">
+                <p style="font-size:2em;">
+                    <a style="font-size:2em;">{{ status }}&nbsp;&nbsp;</a>{{ msg }}
+                    <a href="{{ buildUrl('/') }}">返回首页</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <div style="font-size:0.9em;text-align:center">
+        <a style="font-size:1.3em;text-align:center">帮助中心&nbsp;&nbsp;|&nbsp;&nbsp;反馈&nbsp;&nbsp;|&nbsp;&nbsp;关于我们 &nbsp;&nbsp;|&nbsp;&nbsp;服务协议&nbsp;&nbsp;|&nbsp;&nbsp;English</a><br>
+        <a>请联系管理员Q：1040691703</a>
+    </div>
+{% endblock %}

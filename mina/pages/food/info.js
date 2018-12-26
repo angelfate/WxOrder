@@ -92,8 +92,19 @@ Page({
         });
     },
     buyNow: function () {  // 立即购买
+        var data = {
+            goods:[ {
+                "id":this.data.info.id,
+                "price":this.data.info.price,
+                "number":this.data.buyNumber,
+            }]
+        };
+        this.setData({  // 添加完成之后，规格选择弹出框隐藏起来
+            hideShopPopup:true
+        });
+
         wx.navigateTo({
-            url: "/pages/order/index"
+            url: "/pages/order/index?data=" + JSON.stringify( data )  // 传一个 json数据 给后端，进行解析(可以实现页面公用)
         });
     },
     /**

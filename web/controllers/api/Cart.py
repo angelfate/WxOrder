@@ -14,6 +14,8 @@ from common.libs.UrlManager import UrlManager
 from application import app,db
 import json
 
+
+# 购物车回首页查询
 @route_api.route("/cart/index")
 def cartIndex():
     resp = {'code': 200, 'msg': '查询购物车成功~', 'data': {}}
@@ -44,6 +46,7 @@ def cartIndex():
     return jsonify( resp )
 
 
+# 添加购物车
 @route_api.route("/cart/set", methods=["POST"])
 def setCart():
     resp = {'code': 200, 'msg': '添加购物车成功~', 'data': {}}
@@ -80,28 +83,29 @@ def setCart():
     return jsonify(resp)
 
 
+# 删除购物车数据
 @route_api.route("/cart/del", methods=["POST"])
 def delCart():
-    # resp = {'code': 200, 'msg': '添加购物车成功~', 'data': {}}
-    # req = request.values
-    # params_goods = req['goods'] if 'goods' in req else None
-    #
-    # items = []
-    # if params_goods:
-    #     items = json.loads(params_goods)
-    # if not items or len(items) < 1:
-    #     return jsonify(resp)
-    #
-    # member_info = g.member_info
-    # if not member_info:
-    #     resp['code'] = -1
-    #     resp['msg'] = "删除购物车失败-1~~"
-    #     return jsonify(resp)
-    #
-    # ret = CartService.deleteItem(member_id=member_info.id, items=items)
-    # if not ret:
-    #     resp['code'] = -1
-    #     resp['msg'] = "删除购物车失败-2~~"
-    #     return jsonify(resp)
-    # return jsonify(resp)
-    return
+    resp = {'code': 200, 'msg': '操作成功~', 'data': {}}
+    req = request.values
+    params_goods = req['goods'] if 'goods' in req else None  # 拿到要删除的商品信息
+
+    items = []
+    if params_goods:
+        items = json.loads(params_goods)  # 因为前台传过来的过来的商品是个 json。解析json字符串，变成json对象
+    if not items or len(items) < 1:  # 如果传回来的 items商品为空。就直接返回成功。懒得写错误
+        return jsonify(resp)
+
+    # 删除方法
+    member_info = g.member_info   # 查询操作的用户
+    if not member_info:  # 如果用户不存在
+        resp['code'] = -1
+        resp['msg'] = "删除购物车失败-1~~"
+        return jsonify(resp)
+
+    ret = CartService.deleteItem(member_id=member_info.id, items=items)
+    if not ret:
+        resp['code'] = -1
+        resp['msg'] = "删除购物车失败-2~~"
+        return jsonify(resp)
+    return jsonify(resp)

@@ -97,7 +97,7 @@ flask打印信息：
         use food_db;
         show tables;
         select * from 
-        show create table 数据库\G; 
+        show create table 数据库\G 
         
     https://developers.weixin.qq.com/miniprogram/dev/api/api-login.html（旧版 · 已经不更新）
     https://developers.weixin.qq.com/miniprogram/dev/api/wx.login.html（新版本）

@@ -7,9 +7,9 @@ from common.models.food.Food import Food
 from common.models.pay.PayOrder import PayOrder
 from common.libs.UrlManager import UrlManager
 from common.libs.Helper import getCurrentData
-# from common.libs.pay.PayService import PayService
+from common.libs.pay.PayService import PayService
 # from common.libs.pay.WeChatService import WeChatService
-# from common.libs.member.CartService import CartService
+from common.libs.member.CartService import CartService
 from common.models.member.MemberAddress import MemberAddres
 from common.models.member.OauthMemberBind import OauthMemberBind
 
@@ -68,48 +68,51 @@ def orderInfo():
     resp['data']['default_address'] = default_address  # 地址
     return jsonify(resp)
 
-# @route_api.route("/order/create", methods=[ "POST"])
-# def orderCreate():
-# 	resp = {'code': 200, 'msg': '操作成功~', 'data': {}}
-# 	req = request.values
-# 	type = req['type'] if 'type' in req else ''
-# 	note = req['note'] if 'note' in req else ''
-# 	express_address_id = int( req['express_address_id'] ) if 'express_address_id' in req and req['express_address_id'] else 0
-# 	params_goods = req['goods'] if 'goods' in req else None
-#
-# 	items = []
-# 	if params_goods:
-# 		items = json.loads(params_goods)
-#
-# 	if len( items ) < 1:
-# 		resp['code'] = -1
-# 		resp['msg'] = "下单失败：没有选择商品~~"
-# 		return jsonify(resp)
-#
-# 	address_info = MemberAddress.query.filter_by( id = express_address_id ).first()
-# 	if not address_info or not address_info.status:
-# 		resp['code'] = -1
-# 		resp['msg'] = "下单失败：快递地址不对~~"
-# 		return jsonify(resp)
-#
-# 	member_info = g.member_info
-# 	target = PayService()
-# 	params = {
-# 		"note":note,
-# 		'express_address_id':address_info.id,
-# 		'express_info':{
-# 			'mobile':address_info.mobile,
-# 			'nickname':address_info.nickname,
-# 			"address":"%s%s%s%s"%( address_info.province_str,address_info.city_str,address_info.area_str,address_info.address )
-# 		}
-# 	}
-# 	resp = target.createOrder( member_info.id ,items ,params)
-# 	#如果是来源购物车的，下单成功将下单的商品去掉
-# 	if resp['code'] == 200 and type == "cart":
-# 		CartService.deleteItem( member_info.id,items )
-#
-# 	return jsonify( resp )
-#
+
+@route_api.route("/order/create", methods=["POST"])
+def orderCreate():
+    resp = {'code': 200, 'msg': '操作成功~', 'data': {}}
+    req = request.values
+    type = req['type'] if 'type' in req else ''
+    note = req['note'] if 'note' in req else ''
+    express_address_id = int(req['express_address_id']) if 'express_address_id' in req and req[
+        'express_address_id'] else 0
+    params_goods = req['goods'] if 'goods' in req else None   # 商品详情，默认过来是 json
+
+    items = []  # 转换成list，方便进行后端提交
+    if params_goods:
+        items = json.loads(params_goods)
+
+    if len(items) < 1:
+        resp['code'] = -1
+        resp['msg'] = "下单失败：没有选择商品~~"
+        return jsonify(resp)
+
+    # address_info = MemberAddress.query.filter_by(id=express_address_id).first()
+    # if not address_info or not address_info.status:
+    #     resp['code'] = -1
+    #     resp['msg'] = "下单失败：快递地址不对~~"
+    #     return jsonify(resp)
+    #
+    member_info = g.member_info
+    target = PayService()
+    params = {
+        # "note": note,
+        # 'express_address_id': address_info.id,
+        # 'express_info': {
+        #     'mobile': address_info.mobile,
+        #     'nickname': address_info.nickname,
+        #     "address": "%s%s%s%s" % (
+        #     address_info.province_str, address_info.city_str, address_info.area_str, address_info.address)
+        # }
+    }
+    resp = target.createOrder(member_info.id, items, params)
+    # 如果是来源购物车的，下单成功将下单的商品去掉
+    if resp['code'] == 200 and type == "cart":  # 如果操作成功，并且市场 购物车下的单
+        CartService.deleteItem(member_info.id, items)  # 那么购物车，就删除这个商品（购物车商品id）
+
+    return jsonify(resp)
+
 # @route_api.route("/order/pay", methods=[ "POST"])
 # def orderPay():
 # 	resp = {'code': 200, 'msg': '操作成功~', 'data': {}}

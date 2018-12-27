@@ -164,7 +164,7 @@ def set():
     db.session.add(model_food)
     ret = db.session.commit()
 
-    FoodService.setStockChangeLog(model_food.id, int(stock) - int(before_stock), "后台修改")
+    FoodService.setStockChangeLog(model_food.id, int(stock) - int(before_stock), "后台修改")  # 商品数量变更记录。商品id，变更的数量，备注
     return jsonify(resp)
 
 

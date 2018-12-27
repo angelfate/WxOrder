@@ -7,6 +7,8 @@ route_api = Blueprint( 'api_page',__name__ )  #定义标识
 from web.controllers.api.Member import * # 作业就可以将 Member里面的代码，全部放到 init里面，然后在www里面就可以被注册了
 from web.controllers.api.Food import * # 将 代码注册进来
 from web.controllers.api.Cart import * # 将 代码注册进来
+from web.controllers.api.Order import * # 将 代码注册进来
+
 
 @route_api.route("/") # / 默认访问 index页面
 def index():

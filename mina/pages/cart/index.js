@@ -170,9 +170,10 @@ Page({
             success:function( res ){
                 var resp = res.data;  // 真正的用户返回值
                 app.alert({ 'content':resp.msg }); // 如果是否成功，都会弹出窗口信息
-                that.setData({  // 添加完成之后，规格选择弹出框隐藏起来
-                    hideShopPopup:true
-                });
+
+                //that.setData({  // 添加完成之后，规格选择弹出框隐藏起来
+                //   hideShopPopup:true
+                //});
             }
         });
     },
